@@ -20,6 +20,7 @@ pipeline {
             }
         }
         stage('Approval'){
+            echo "Approval Step"
             input message: 'Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan ke tahapan deploy)'
         }
         stage('Deploy') { 
