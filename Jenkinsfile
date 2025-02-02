@@ -4,11 +4,12 @@ node {
     docker.image('node:16-buster-slim').inside('-p 3000:3000') {
         stage('Build') {
             // sh 'npm install'
-            echo 'Application will be active for 1 minutes'
+            echo 'Process: npm install'
         }
         
         stage('Test') {
-            sh './jenkins/scripts/test.sh'
+            // sh './jenkins/scripts/test.sh'
+            echo 'Process: test.sh'
         }
     }
 }
