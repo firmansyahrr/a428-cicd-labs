@@ -1,7 +1,7 @@
 node(null) {
     checkout scm
 
-    docker.image('node:16-buster-slim').inside('-p 3000:3000 --volume /usr/bin/ssh-agent:/usr/bin/ssh-agent --volume /usr/bin/ssh:/usr/bin/ssh -u root') {
+    docker.image('node:16-buster-slim').inside('-p 3000:3000 -u root') {
         stage('Build') {
             sh 'npm cache clean --force'
             sh 'npm install'
@@ -16,10 +16,8 @@ node(null) {
         }
 
         stage('Tes Connection') {
-            sh '''
-                apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openssh-client
-                rm -rf /var/lib/apt/lists/*
-            '''
+            sh 'apk add --no-cache openssh-client'
+
             sshagent(credentials: ['ec2-ssh-key']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${env.EC2_USER}@${env.EC2_HOST} \
