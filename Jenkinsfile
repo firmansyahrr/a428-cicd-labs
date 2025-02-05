@@ -1,7 +1,7 @@
 node(null) {
     checkout scm
 
-    docker.image('node:16-buster-slim').inside('-p 3000:3000 -u root') {
+    docker.image('cimg/node:16.20').inside('-p 3000:3000 -u root') {
         stage('Build') {
             sh 'npm cache clean --force'
             sh 'npm install'
