@@ -1,7 +1,7 @@
-node {
+node(null) {
     checkout scm
 
-    docker.image('node:16-buster-slim').inside('-p 3000:3000') {
+    docker.image('node:16-buster-slim').inside('-p 3000:3000 -v /usr/bin/ssh-agent:/usr/bin/ssh-agent') {
         stage('Build') {
             sh 'npm cache clean --force'
             sh 'npm install'
