@@ -16,6 +16,7 @@ node(null) {
         }
 
         stage('Tes Connection') {
+            sh 'apt-get update && apt-get install -y openssh-client'
             sshagent(credentials: ['ec2-ssh-key']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${env.EC2_USER}@${env.EC2_HOST} \
