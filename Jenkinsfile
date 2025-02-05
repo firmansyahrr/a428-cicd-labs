@@ -15,19 +15,21 @@ node(null) {
             input message: 'Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
         }
 
-        stage('Tes Connection') {
-            sshagent(credentials: ['ec2-ssh-key']) {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ${env.EC2_USER}@${env.EC2_HOST} \
-                    'pwd'
-                """
-            }
-        }
-
         stage('Deploy') {
             sh 'npm run build'
             sh 'pwd'
             sh 'ls -la'
+
+            sshagent(credentials: ['ec2-ssh-key']) {
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${env.EC2_USER}@${env.EC2_HOST} \
+                        'mkdir -p /home/ubuntu/react-app'
+                """
+
+                sh """
+                scp -r -o StrictHostKeyChecking=no build ${env.EC2_USER}@${env.EC2_HOST}:/home/ubuntu/react-app
+                """
+            }
             // // sh './jenkins/scripts/deliver.sh'
             // input message: 'Finished using the website? (Click "Proceed" to continue)'
             // sh './jenkins/scripts/kill.sh'
